@@ -1,29 +1,28 @@
-# worlds-toughest-row-trackers
+# World’s Toughest Row — Daily Tracker for team Madlantic(Python)
 
-Daily Python tracker for World’s Toughest Row (Team Madlantic)
+A small Python pipeline that fetches live leaderboard JSON data for the World’s Toughest Row (Atlantic) and generates a daily follower-friendly update (WhatsApp/Instagram style).
 
-Context:
-  A Python script that automatically fetches live race data from the World’s Toughest Row Atlantic challenge and generates a daily, human-readable update for followers.
+## What it does
+- Fetches leaderboard JSON snapshots
+- Extracts Thomas’ metrics (by team id)
+- Computes:
+  - distance rowed last 24h (km)
+  - total distance so far (km)
+  - progress percentage
+  - remaining distance (km)
+  - elapsed time since race start (computed locally from start timestamp)
+  - rank changes vs previous snapshot
+- Saves daily snapshots (`data/`) and ready-to-share texts (`outputs/`)
 
-What the script does:
-  Fetches daily leaderboard JSON data
-  Extracts race metrics for a specific athlete
-  Calculates:
-    daily distance
-    total distance
-    race progress (%)
-    elapsed time since race start
-    day-to-day rank changes
-Stores daily snapshots for comparison
-Generates a ready-to-share text update
+## Tech highlights
+- Python (requests/urllib, json)
+- Nested JSON parsing (dict/list)
+- datetime / timedelta
+- File persistence for day-to-day diffs
+- GitHub Actions scheduling + auto-commits
 
-Technical highlights:
-  Python
-  JSON / nested data structures
-  Datetime & timedelta
-  File I/O for state persistence
-  Cron automation
-  Defensive coding (missing data handling)
+## Example output
+```text
+[plak hier een voorbeeld van je update]
 
-Example output:
 
