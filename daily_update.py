@@ -119,7 +119,7 @@ message = (
     f"Voet aan wal op Antigua in.... {distance_left} kilometer\n"
 )
 
-txtfile = Path("outputs") / f"update_{today}.txt"
+txtfile = Path("data/outputs") / f"update_{today}.txt"
 with open(f"update_{date_today}.txt", "w") as handle: 
     handle.write(message)
 
