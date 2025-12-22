@@ -32,8 +32,8 @@ try:
     filename = Path("data") / f"leaderboard_{yesterday}.json"
     with open(filename, "r") as handle: 
         yesterday_data = json.load(handle)
-    except FileNotFoundError: 
-        yesterday_data = None
+except FileNotFoundError: 
+    yesterday_data = None
 
 THOMAS_ID = 40
 #teams today
