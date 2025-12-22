@@ -29,6 +29,7 @@ jobs:
         env:
           LEADERBOARD_URL: ${{ secrets.LEADERBOARD_URL }}
         run: |
+          ls -la
           python daily_update.py
 
       - name: Commit outputs
