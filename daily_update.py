@@ -120,7 +120,7 @@ message = (
 )
 
 txtfile = Path("outputs") / f"update_{today}.txt"
-with open(f"update_{date_today}.txt", "w") as handle: 
+with open(txtfile, "w") as handle: 
     handle.write(message)
 
 print(message)
