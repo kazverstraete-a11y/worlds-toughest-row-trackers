@@ -173,17 +173,16 @@ DAY_LABELS_PERFORMANCE = {
     5: "Uitzonderlijke dag",
 }
 
-day_performance = DAY_LABELS_PERFORMANCE.get(score, "onvoldoende data")
-day_conditions = DAY_LABELS_CONDITIONS.get(score, "onduidelijke omstandigheden")
-
 if score = "n.v.t.":
     day_sentence = (
-        "Vandaag oogt als een sterke dag op zee.\n"
+        f"Vandaag oogt als een sterke dag op zee.\n"
         f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
-        "Er is momenteel nog onvoldoende historische data "
-        "om deze prestatie objectief te classificeren."
+        f"Er is momenteel nog onvoldoende historische data "
+        f"om deze prestatie objectief te classificeren."
     )
 else:
+    day_performance = DAY_LABELS_PERFORMANCE.get(score, "onvoldoende data")
+    day_conditions = DAY_LABELS_CONDITIONS.get(score, "onduidelijke omstandigheden")
     day_sentence = (
         f"Vandaag lijkt op een {day_performance} {emoji} (score {score}/5).\n"
         f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
@@ -197,7 +196,7 @@ message = (
     f"Thomas'statistieken sinds vorige update ({yesterday}) \n\n"
     f"Solo klassement: {today_solo_rank}e positie {delta_solo_str}\n"
     f"Algemeen klassement: {today_overall_rank}e positie {delta_overall_str} \n\n"
-    f"{day_sentence} \n\n"
+    f"{day_sentence}\n\n"
     f"Totale afgelegde afstand: {dmg_km} kilometer\n"
     f".....omgerekend zijn dat {strokes} roeislagen. \n\n"
     f"Thomas heeft al {percent_done}% van het hele avontuur voltooid 📊\n"
