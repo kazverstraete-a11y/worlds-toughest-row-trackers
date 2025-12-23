@@ -186,7 +186,7 @@ if score = "n.v.t.":
 else:
     day_sentence = (
         f"Vandaag lijkt op een {day_performance} {emoji} (score {score}/5).\n"
-        f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n""
+        f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
         f"Mogelijk speelden hierbij ook {day_conditions} op zee een rol."
     )
 
