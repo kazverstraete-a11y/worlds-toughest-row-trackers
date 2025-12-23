@@ -173,7 +173,7 @@ DAY_LABELS_PERFORMANCE = {
     5: "Uitzonderlijke dag",
 }
 
-if score = "n.v.t.":
+if score == "n.v.t.":
     day_sentence = (
         f"Vandaag oogt als een sterke dag op zee.\n"
         f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
