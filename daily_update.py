@@ -177,7 +177,7 @@ if score == "n.v.t.":
     day_sentence = (
         f"Vandaag oogt als een sterke dag op zee.\n"
         f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
-        f"Er is momenteel nog onvoldoende historische data "
+        f"Er is momenteel nog onvoldoende historische data \n"
         f"om deze prestatie objectief te classificeren."
     )
 else:
