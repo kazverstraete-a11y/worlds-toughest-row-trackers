@@ -121,7 +121,6 @@ d24_list = list()
 for file_path in recent_files: 
     with open(file_path, "r") as f:
         data = json.load(f)
-        
     teams_o_data = data['tags'][0]['teams']
     thomas = next(team for team in teams_o_data if team['id'] == THOMAS_ID)
     d24_list.append(thomas['d24'] / 1000)
@@ -136,17 +135,17 @@ else:
 #z-scores
 score = "n.v.t."
 z = None
-    if len(d24_list) >= 2 and sd_d24 > 0:
+if len(d24_list) >= 2 and sd_d24 > 0:
         z = (d24_today_km - avg_d24) / sd_d24
-    if z > 1.5:
+if z > 1.5:
         score = 5
-    elif z >0.5:
+elif z >0.5:
         score = 4
-    elif z >= -0.5:
+elif z >= -0.5:
         score = 3
-    elif z >= -1.5:
+elif z >= -1.5:
         score = 2
-    else:
+else:
         score = 1
 
 EMOJI = {
