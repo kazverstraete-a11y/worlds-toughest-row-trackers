@@ -136,16 +136,16 @@ else:
 score = "n.v.t."
 z = None
 if len(d24_list) >= 2 and sd_d24 > 0:
-        z = (d24_today_km - avg_d24) / sd_d24
-if z > 1.5:
+    z = (d24_today_km - avg_d24) / sd_d24
+    if z > 1.5:
         score = 5
-elif z >0.5:
+    elif z >0.5:
         score = 4
-elif z >= -0.5:
+    elif z >= -0.5:
         score = 3
-elif z >= -1.5:
+    elif z >= -1.5:
         score = 2
-else:
+    else:
         score = 1
 
 EMOJI = {
@@ -175,7 +175,20 @@ DAY_LABELS_PERFORMANCE = {
 
 day_performance = DAY_LABELS_PERFORMANCE.get(score, "onvoldoende data")
 day_conditions = DAY_LABELS_CONDITIONS.get(score, "onduidelijke omstandigheden")
-    
+
+if score = "n.v.t.":
+    day_sentence = (
+        "Vandaag oogt als een sterke dag op zee.\n"
+        f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n""
+        "Er is momenteel nog onvoldoende historische data "
+        "om deze prestatie objectief te classificeren."
+    )
+else:
+    day_sentence = (
+        f"Vandaag lijkt op een {day_performance} {emoji} (score {score}/5).\n"
+        f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n""
+        f"Mogelijk speelden hierbij ook {day_conditions} op zee een rol."
+    )
 
 #bericht
 message = (
@@ -184,9 +197,7 @@ message = (
     f"Thomas'statistieken sinds vorige update ({yesterday}) \n\n"
     f"Solo klassement: {today_solo_rank}e positie {solo_str}\n"
     f"Algemeen klassement: {today_overall_rank}e positie {diff_str} \n\n"
-    f"Vandaag lijkt op een {day_performance} {emoji} (Score {score}/5)\n"
-    f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
-    f"Mogelijk speelden hierbij ook {day_conditions} een rol.\n\n"
+    f"{day_sentence} \n\n"
     f"Totale afgelegde afstand: {dmg_km} kilometer\n"
     f".....omgerekend zijn dat {strokes} roeislagen. \n\n"
     f"Thomas heeft al {percent_done}% van het hele avontuur voltooid 📊\n"
@@ -199,3 +210,5 @@ with open(txtfile, "w") as handle:
     handle.write(message)
 
 print(message)
+
+
