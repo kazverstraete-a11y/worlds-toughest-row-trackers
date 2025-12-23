@@ -185,7 +185,7 @@ message = (
     f"Solo klassement: {today_solo_rank}e positie {solo_str}\n"
     f"Algemeen klassement: {today_overall_rank}e positie {diff_str} \n\n"
     f"Vandaag lijkt op een {day_performance} {emoji} (Score {score}/5)\n"
-    f"Thomas legde {d24_today_km.1f}km af in in 24u.\n"
+    f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
     f"Mogelijk speelden hierbij ook {day_conditions} een rol.\n\n"
     f"Totale afgelegde afstand: {dmg_km} kilometer\n"
     f".....omgerekend zijn dat {strokes} roeislagen. \n\n"
