@@ -176,7 +176,7 @@ DAY_LABELS_PERFORMANCE = {
 day_performance = DAY_LABELS_PERFORMANCE.get(score, "onvoldoende data")
 day_conditions = DAY_LABELS_CONDITIONS.get(score, "onduidelijke omstandigheden")
 
-if score = "n.v.t.":
+if score == "n.v.t.":
     day_sentence = (
         "Vandaag oogt als een sterke dag op zee.\n"
         f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
