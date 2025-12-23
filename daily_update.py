@@ -67,9 +67,9 @@ today_overall_rank = thomas['rankR']
 try:
     delta_overall = thomas['rankR'] - yesterday_thomas['rankR']
     if delta_overall > 0:
-        delta_overall_str = f"(+{delta_overall} plaats(en))"
-    elif diff_overal < 0:
-        delta_overall_str = f"({delta_overall} plaats(en))"
+        delta_overall_str = f"(-{delta_overall} plaats(en))"
+    elif delta_overall < 0:
+        delta_overall_str = f"(+{abs(delta_overall)} plaats(en))"
     else:
         delta_overall_str = "(Zelfde plaats)"
 except: 
@@ -78,10 +78,10 @@ except:
 #rank solo
 today_solo_rank = thomas_solo['rankR']
 try:
-    delta_rank_solo = thomas_solo['rankR'] - yesterday_thomas['rankR']
-    if delta_rank_solo > 0:
+    delta_rank_solo = thomas_solo['rankR'] - yesterday_thomas_solo['rankR']
+    if delta_rank_solo < 0:
         delta_solo_str = f"(+{delta_rank_solo} plaats(en) opgeschoven.)"
-    elif diff_overal < 0:
+    elif delta_rank_solo > 0:
         delta_solo_str = f"({delta_rank_solo} plaatsen(en) toegegeven.)"
     else:
         delta_solo_str = "(Zelfde plaats)"
@@ -173,7 +173,7 @@ DAY_LABELS_PERFORMANCE = {
     5: "Uitzonderlijke dag",
 }
 
-if score == "n.v.t.":
+if score = "n.v.t.":
     day_sentence = (
         f"Vandaag oogt als een sterke dag op zee.\n"
         f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
@@ -191,7 +191,7 @@ else:
 
 #bericht
 message = (
-    f"\n\n"
+    f"\n"
     f"🌊 World's Toughest Row - Dagelijkse update van {now_strf} \n"
     f"Thomas'statistieken sinds vorige update ({yesterday}) \n\n"
     f"Solo klassement: {today_solo_rank}e positie {delta_solo_str}\n"
