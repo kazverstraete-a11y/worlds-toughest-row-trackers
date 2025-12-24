@@ -205,7 +205,7 @@ message = (
     f"Total distance covered: {dmg_km} km.\n"
     f"...equivalent to {strokes} rowing strokes.\n\n"
     f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
-    f"Distance remaining to Antigua: {distance_left} km.\n\n"
+    f"Distance remaining to Antigua: {distance_left:1.} km.\n\n"
 )
 
 txtfile = Path("outputs") / f"update_{today}.txt"
