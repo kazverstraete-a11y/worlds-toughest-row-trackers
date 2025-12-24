@@ -195,7 +195,7 @@ else:
 
 #bericht
 message = (
-    f"\n"
+    "\n"
     f"🌊 World's Toughest Row – Daily update – {now_strf}\n"
     f"Thomas' data and figures since the previous update ({yesterday})\n\n"
     f"Solo rank: {today_solo_rank} position {delta_solo_str}.\n"
