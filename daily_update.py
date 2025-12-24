@@ -213,7 +213,7 @@ message = (
 
 txtfile = Path("outputs") / f"update_{today}.txt"
 with open(txtfile, "w") as handle: 
-    handle.write(message)’‘
+    handle.write(message)
 
 print(message)
 
