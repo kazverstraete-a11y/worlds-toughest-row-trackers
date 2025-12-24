@@ -68,11 +68,11 @@ today_overall_rank = thomas['rankR']
 try:
     delta_overall = thomas['rankR'] - yesterday_thomas['rankR']
     if delta_overall > 0:
-        delta_overall_str = f"(-{delta_overall} plaats(en))"
+        delta_overall_str = f"(-{delta_overall} place(s))"
     elif delta_overall < 0:
-        delta_overall_str = f"(+{abs(delta_overall)} plaats(en))"
+        delta_overall_str = f"(+{abs(delta_overall)} place(s))"
     else:
-        delta_overall_str = "(Zelfde plaats)"
+        delta_overall_str = "(Same place)"
 except: 
     delta_overall_str = ""
 
@@ -81,11 +81,11 @@ today_solo_rank = thomas_solo['rankR']
 try:
     delta_rank_solo = thomas_solo['rankR'] - yesterday_thomas_solo['rankR']
     if delta_rank_solo < 0:
-        delta_solo_str = f"(+{delta_rank_solo} plaats(en) opgeschoven.)"
+        delta_solo_str = f"(+{delta_rank_solo} place(s))"
     elif delta_rank_solo > 0:
-        delta_solo_str = f"({delta_rank_solo} plaatsen(en) toegegeven.)"
+        delta_solo_str = f"({delta_rank_solo} place(s))"
     else:
-        delta_solo_str = "(Zelfde plaats)"
+        delta_solo_str = "(Same place)"
 except:
     delta_solo_str = ""
 
@@ -190,7 +190,7 @@ else:
         f"Thomas covered {d24_today_km:.1f} km over the past 24 hours.\n"
         f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
         f"Sea conditions (i.e. {day_conditions} ) may have influenced this effort.\n"
-        f"(Score calculated by comparing with Thomas' 5-day average covered distance"
+        f"(Score calculated by comparing with Thomas' 5-day average covered distance)"
     )
 
 #bericht
@@ -205,7 +205,7 @@ message = (
     f"Total distance covered: {dmg_km} km\n"
     f"...equivalent to {strokes} rowing strokes.\n\n"
     f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
-    f"Distance remaining to Antigua: {distance_left} km\n\n"
+    f"Distance remaining to Antigua: {distance_left:1.} km\n\n"
 )
 
 txtfile = Path("outputs") / f"update_{today}.txt"
