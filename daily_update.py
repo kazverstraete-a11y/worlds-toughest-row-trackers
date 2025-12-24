@@ -187,9 +187,10 @@ else:
     day_performance = DAY_LABELS_PERFORMANCE.get(score, "insufficient data")
     day_conditions = DAY_LABELS_CONDITIONS.get(score, "unclear conditions")
     day_sentence = (
-        f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
         f"Thomas covered {d24_today_km:.1f} km over the past 24 hours.\n"
-        f"Sea conditions such as {day_conditions} may have influenced this effort."
+        f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
+        f"Sea conditions (i.e. {day_conditions} ) may have influenced this effort."
+        f"(Score calculated by comparing with Thomas' 5-day average covered distance"
     )
 
 #bericht
