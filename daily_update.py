@@ -58,9 +58,9 @@ TOTAL_DISTANCE_KM = 4800
 METERS_TO_KM = 1 / 1000
 
 d24_today_km = round(thomas['d24'] * METERS_TO_KM, 2)
-dmg_km = float(round(thomas['dmg'] * METERS_TO_KM, 2))
+dmg_km = round(thomas['dmg'] * METERS_TO_KM, 2)
 strokes = int((dmg_km * 1000) / 4)
-distance_left = float(TOTAL_DISTANCE_KM - dmg_km)
+distance_left = TOTAL_DISTANCE_KM - dmg_km
 percent_done = round((dmg_km / TOTAL_DISTANCE_KM) * 100, 2)
 
 #rank overall
