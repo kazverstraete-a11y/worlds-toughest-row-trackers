@@ -189,7 +189,7 @@ else:
     day_sentence = (
         f"Thomas covered {d24_today_km:.1f} km over the past 24 hours.\n"
         f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
-        f"Sea conditions (i.e. {day_conditions} ) may have influenced this effort."
+        f"Sea conditions (i.e. {day_conditions} ) may have influenced this effort.\n"
         f"(Score calculated by comparing with Thomas' 5-day average covered distance"
     )
 
@@ -201,9 +201,9 @@ message = (
     f"Solo rank: {today_solo_rank} position {delta_solo_str}\n"
     f"Overall rank: {today_overall_rank} position {delta_overall_str}\n\n"
     f"{day_sentence}\n\n"
+    f"Thomas has now completed {percent_done}% of the entire journey 📊\n"
     f"Total distance covered: {dmg_km} km\n"
     f"...equivalent to {strokes} rowing strokes.\n\n"
-    f"Thomas has now completed {percent_done}% of the entire journey 📊\n"
     f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
     f"Distance remaining to Antigua: {distance_left} km\n\n"
 )
