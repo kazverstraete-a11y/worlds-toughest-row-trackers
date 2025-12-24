@@ -176,18 +176,21 @@ DAY_LABELS_PERFORMANCE = {
     5: "Exceptional day",
 }
 
+#helper
+def fmt_km(x):
+    return f"{x:.1f}" if isinstance (x, (int, float)) else "n.v.t."
 
 if score == "n.v.t.":
     day_sentence = (
            "Today appears to be a strong day at sea.\n"
-            f"Thomas covered {d24_today_km:.1f} km over the past 24 hours.\n"
+            f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
             "More data is needed before this effort can be objectively classified."
     )
 else:
     day_performance = DAY_LABELS_PERFORMANCE.get(score, "insufficient data")
     day_conditions = DAY_LABELS_CONDITIONS.get(score, "unclear conditions")
     day_sentence = (
-        f"Thomas covered {d24_today_km:.1f} km over the past 24 hours.\n"
+        f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
         f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
         f"Sea conditions (i.e. {day_conditions} ) may have influenced this effort.\n"
         f"(Score calculated by comparing with Thomas' 5-day average covered distance)"
@@ -205,12 +208,12 @@ message = (
     f"Total distance covered: {dmg_km} km\n"
     f"...equivalent to {strokes} rowing strokes.\n\n"
     f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
-    f"Distance remaining to Antigua: {distance_left:1.} km\n\n"
+    f"Distance remaining to Antigua: {fmt_km(distance_left)} km\n\n"
 )
 
 txtfile = Path("outputs") / f"update_{today}.txt"
 with open(txtfile, "w") as handle: 
-    handle.write(message)
+    handle.write(message)’‘
 
 print(message)
 
