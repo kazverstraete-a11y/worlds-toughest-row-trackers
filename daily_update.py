@@ -4,6 +4,7 @@ import ssl
 import pandas as pd
 import numpy as np
 import os
+import matplotlib.pyplot as plt
 from pathlib import Path
 from datetime import date, datetime, timedelta
 
@@ -117,6 +118,7 @@ json_folder_path = Path('data')
 files = list(json_folder_path.glob("*.json"))
 recent_files = sorted(files, reverse=True)[1:6]
 
+dates = list()
 d24_list = list()
 for file_path in recent_files: 
     with open(file_path, "r") as f:
@@ -124,6 +126,7 @@ for file_path in recent_files:
     teams_o_data = data['tags'][0]['teams']
     thomas = next(team for team in teams_o_data if team['id'] == THOMAS_ID)
     d24_list.append(thomas['d24'] / 1000)
+    dates.append(date_today)
 
 if len(d24_list) >= 2:
     avg_d24 = np.mean(d24_list)
@@ -158,50 +161,50 @@ EMOJI = {
 emoji = EMOJI.get(score, "")
         
 DAY_LABELS_CONDITIONS = {
-    1: "Zware omstandigheden",
-    2: "Tegenwerkende zee",
-    3: "Neutrale omstandigheden",
-    4: "Goede flow",
-    5: "Perfecte dag op zee",
+    1: "Challenging conditions",
+    2: "Headwinds and adverse seas",
+    3: "Neutral conditions",
+    4: "Favourable flow",
+    5: "Perfect day at sea",
 }
 
 DAY_LABELS_PERFORMANCE = {
-    1: "Hersteldag", 
-    2: "Beheerde dag",
-    3: "Stabiele dag",
-    4: "Sterke dag",
-    5: "Uitzonderlijke dag",
+    1: "Recovery day",
+    2: "Controlled day",
+    3: "Steady day",
+    4: "Strong day",
+    5: "Exceptional day",
 }
+
 
 if score == "n.v.t.":
     day_sentence = (
-        f"Vandaag oogt als een sterke dag op zee.\n"
-        f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
-        f"Er is momenteel nog onvoldoende historische data \n"
-        f"om deze prestatie objectief te classificeren."
+           "Today appears to be a strong day at sea.\n"
+            f"Thomas covered {d24_today_km:.1f} km over the past 24 hours.\n"
+            "More data is needed before this effort can be objectively classified."
     )
 else:
-    day_performance = DAY_LABELS_PERFORMANCE.get(score, "onvoldoende data")
-    day_conditions = DAY_LABELS_CONDITIONS.get(score, "onduidelijke omstandigheden")
+    day_performance = DAY_LABELS_PERFORMANCE.get(score, "insufficient data")
+    day_conditions = DAY_LABELS_CONDITIONS.get(score, "unclear conditions")
     day_sentence = (
-        f"Vandaag lijkt op een {day_performance} {emoji} (score {score}/5).\n"
-        f"Thomas legde {d24_today_km:.1f}km af in in 24u.\n"
-        f"Mogelijk speelden hierbij ook {day_conditions} op zee een rol."
+        f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
+        f"Thomas covered {d24_today_km:.1f} km over the past 24 hours.\n"
+        f"Sea conditions such as {day_conditions} may have influenced this effort."
     )
 
 #bericht
 message = (
     f"\n"
-    f"🌊 World's Toughest Row - Dagelijkse update van {now_strf} \n"
-    f"Thomas'statistieken sinds vorige update ({yesterday}) \n\n"
-    f"Solo klassement: {today_solo_rank}e positie {delta_solo_str}\n"
-    f"Algemeen klassement: {today_overall_rank}e positie {delta_overall_str} \n\n"
+    f"🌊 World's Toughest Row – Daily update – {now_strf}\n"
+    f"Thomas' data and figures since the previous update ({yesterday})\n\n"
+    f"Solo rank: {today_solo_rank} position {delta_solo_str}\n"
+    f"Overall rank: {today_overall_rank} position {delta_overall_str}\n\n"
     f"{day_sentence}\n\n"
-    f"Totale afgelegde afstand: {dmg_km} kilometer\n"
-    f".....omgerekend zijn dat {strokes} roeislagen. \n\n"
-    f"Thomas heeft al {percent_done}% van het hele avontuur voltooid 📊\n"
-    f"Hij spendeert al {days} dagen {hours} uur en {seconds} seconden op den 'Boiteau'\n"
-    f"Voet aan wal op Antigua in.... {distance_left} kilometer\n\n\n"
+    f"Total distance covered: {dmg_km} km\n"
+    f"...equivalent to {strokes} rowing strokes.\n\n"
+    f"Thomas has now completed {percent_done}% of the entire journey 📊\n"
+    f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
+    f"Distance remaining to Antigua: {distance_left} km\n\n"
 )
 
 txtfile = Path("outputs") / f"update_{today}.txt"
@@ -209,5 +212,19 @@ with open(txtfile, "w") as handle:
     handle.write(message)
 
 print(message)
+
+#trendvisual afgelegde kms per 24u
+plt.figure(figsize=(8, 4))
+plt.plot(dates, d24_list, marker="o")
+plt.axhline(avg_d24, linestyle="--", colour="grey", alpha=0.4, label="5-daags gemiddelde")
+
+plt.title("Distance last 24h - World's Toughest Row")
+plt.ylabel("Kilometer")
+plt.xlabel("Date")
+plt.xticks(rotation=45)
+plt.legen()
+plt.tight_layout()
+plt.savefig(f"outputs/d24_trend_{date_today}.png")
+plt.close()
 
 
