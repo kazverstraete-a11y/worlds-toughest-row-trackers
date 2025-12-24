@@ -216,7 +216,7 @@ print(message)
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
 plt.plot(dates, d24_list, marker="o")
-plt.axhline(avg_d24, linestyle="--", colour="grey", alpha=0.4, label="5-daags gemiddelde")
+plt.axhline(avg_d24, linestyle="--", color="grey", alpha=0.4, label="5-daags gemiddelde")
 
 plt.title("Distance last 24h - World's Toughest Row")
 plt.ylabel("Kilometer")
