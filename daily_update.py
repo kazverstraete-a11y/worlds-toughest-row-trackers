@@ -125,8 +125,13 @@ for file_path in recent_files:
         data = json.load(f)
     teams_o_data = data['tags'][0]['teams']
     thomas = next(team for team in teams_o_data if team['id'] == THOMAS_ID)
+    
     d24_list.append(thomas['d24'] / 1000)
-    dates.append(date_today)
+
+    file_date = file_path.stem.replace("leaderboard_", "")
+    dates.append(file_date)
+dates.reverse()
+d24_list.reverse()
 
 if len(d24_list) >= 2:
     avg_d24 = np.mean(d24_list)
@@ -219,8 +224,8 @@ print(message)
 
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
-plt.plot(dates, d24_list, marker="o")
-plt.axhline(avg_d24, linestyle="--", color="grey", alpha=0.4, label="5-daags gemiddelde")
+plt.plot(dates, d24_list, marker="o", label="24h distance")
+plt.axhline(avg_d24, linestyle="--", color="grey", alpha=0.6, label="5-day average")
 
 plt.title("Distance last 24h - World's Toughest Row")
 plt.ylabel("Kilometer")
