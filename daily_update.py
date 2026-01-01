@@ -126,7 +126,7 @@ for file_path in recent_files:
     teams_o_data = data['tags'][0]['teams']
     thomas = next(team for team in teams_o_data if team['id'] == THOMAS_ID)
     
-    d24_km = thomas['d24'] / 1000)
+    d24_km = thomas['d24'] / 1000
 
     file_date_str = file_path.stem.replace("leaderboard_", "")
     file_date = pd.to_datetime(file_date_str)
