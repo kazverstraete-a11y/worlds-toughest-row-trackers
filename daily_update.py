@@ -116,22 +116,36 @@ delta_speed = speed_24_today - speed_24_yesterday
 #rolling averages
 json_folder_path = Path('data')
 files = list(json_folder_path.glob("*.json"))
-recent_files = sorted(files, reverse=True)[1:6]
+recent_files = sorted(files, reverse=True)[0:’]
 
-dates = list()
-d24_list = list()
+rows = list()
+
 for file_path in recent_files: 
     with open(file_path, "r") as f:
         data = json.load(f)
     teams_o_data = data['tags'][0]['teams']
     thomas = next(team for team in teams_o_data if team['id'] == THOMAS_ID)
     
-    d24_list.append(thomas['d24'] / 1000)
+    d24_km = thomas['d24'] / 1000)
 
-    file_date = file_path.stem.replace("leaderboard_", "")
-    dates.append(file_date)
-dates.reverse()
-d24_list.reverse()
+    file_date_str = file_path.stem.replace("leaderboard_", "")
+    file_date = pd.to_datetime(file_date_str)
+    rows.append((file_date, d24_km))
+
+df = (
+    pd.DataFrame(rows, columns=["date", "d24_km"])
+    .sort_values("date")
+    .reset_index(drop=True)
+)
+
+dates = df["date"].dt.strftime("%Y-%m-%d").tolist()
+d24_list = df["d24_km"].tolist()
+
+df["d24_ma5"] = df["d24_km"].rolling(window=5, min_periods=1).mean()
+last5_avg = float(df["d24_km"].tail(5).mean())
+ma5_today = float(df["d24_ma5"].iloc[-1])
+d24_today_km = float(df["d24_km"].iloc[-1])
+
 
 if len(d24_list) >= 2:
     avg_d24 = np.mean(d24_list)
@@ -143,8 +157,11 @@ else:
 #z-scores
 score = "n.v.t."
 z = None
+
+baseline = ma5_today
+
 if len(d24_list) >= 2 and sd_d24 > 0:
-    z = (d24_today_km - avg_d24) / sd_d24
+    z = (d24_today_km - baseline) / sd_d24
     if z > 1.5:
         score = 5
     elif z >0.5:
@@ -174,10 +191,10 @@ DAY_LABELS_CONDITIONS = {
 }
 
 DAY_LABELS_PERFORMANCE = {
-    1: "Recovery day",
-    2: "Controlled day",
-    3: "Steady day",
-    4: "Strong day",
+    1: "Controlled day",
+    2: "Steady day",
+    3: "Strong day",
+    4: "Very strong day",
     5: "Exceptional day",
 }
 
@@ -224,8 +241,9 @@ print(message)
 
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
-plt.plot(dates, d24_list, marker="o", label="24h distance")
-plt.axhline(avg_d24, linestyle="--", color="grey", alpha=0.6, label="5-day average")
+plt.plot(df["date"], df["24_km"], marker="o", label="24h distance")
+plt.axhline(df["date"], df["d24_ma5"], linestyle="--", color="grey", alpha=0.6, label="5-day average")
+plt.axhline(last5_avg, linestyle=":", alpha=0.6, label="avg last 5 days")
 
 plt.title("Distance last 24h - World's Toughest Row")
 plt.ylabel("Kilometer")
