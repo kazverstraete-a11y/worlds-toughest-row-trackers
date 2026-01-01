@@ -245,6 +245,22 @@ plt.plot(df["date"], df["d24_km"], marker="o", label="24h distance")
 plt.plot(df["date"], df["d24_ma5"], linestyle="--", color="grey", alpha=0.8, label="5-day average")
 plt.axhline(last5_avg, linestyle=":", alpha=0.6, label="avg last 5 days")
 
+plt.fill_between(
+    df["date"],
+    df["d24_ma5"] - 5,
+    df["d24_ma5"] + 5,
+    alpha=0.1,
+    label="±5 km performance band"
+)
+
+plt.scatter(
+    df["date"].iloc[-1],
+    df["d24_km"].iloc[-1],
+    s=100,
+    zorder=5,
+    label="today"
+)
+
 plt.title("Distance last 24h - World's Toughest Row")
 plt.ylabel("Kilometer")
 plt.xlabel("Date")
