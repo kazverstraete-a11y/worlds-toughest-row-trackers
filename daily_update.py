@@ -242,7 +242,7 @@ print(message)
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
 plt.plot(df["date"], df["d24_km"], marker="o", label="24h distance")
-plt.axhline(df["date"], df["d24_ma5"], linestyle="--", color="grey", alpha=0.6, label="5-day average")
+plt.plot(df["date"], df["d24_ma5"], linestyle="--", color="grey", alpha=0.8, label="5-day average")
 plt.axhline(last5_avg, linestyle=":", alpha=0.6, label="avg last 5 days")
 
 plt.title("Distance last 24h - World's Toughest Row")
