@@ -250,15 +250,6 @@ plt.fill_between(
     df["d24_ma5"] - 5,
     df["d24_ma5"] + 5,
     alpha=0.1,
-    label="±5 km performance band"
-)
-
-plt.scatter(
-    df["date"].iloc[-1],
-    df["d24_km"].iloc[-1],
-    s=100,
-    zorder=5,
-    label="today"
 )
 
 plt.title("Distance last 24h - World's Toughest Row")
