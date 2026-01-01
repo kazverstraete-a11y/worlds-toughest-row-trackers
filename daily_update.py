@@ -116,7 +116,7 @@ delta_speed = speed_24_today - speed_24_yesterday
 #rolling averages
 json_folder_path = Path('data')
 files = list(json_folder_path.glob("*.json"))
-recent_files = sorted(files, reverse=True)[0:’]
+recent_files = sorted(files, reverse=True)
 
 rows = list()
 
