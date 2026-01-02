@@ -32,9 +32,6 @@ def read_kml_coordinates(kml_path):
 coordinates = read_kml_coordinates('route.kml')
 route_df = pd.DataFrame(coordinates, columns=['lat', 'lon'])
 
-print("\nThere are ", len(coordinates),"coordinates in the file.\n")
-print(route_df.head())
-
 #cumulatieve afstand langsheen de route, haversine formule = afstand tussen twee punten op een bol(sferische afstand)
 def haversine_km(lat1, lon1, lat2, lon2):
     R = 6371.0088
@@ -55,9 +52,6 @@ route_df['seg_km'] = [
 
 route_df['seg_km'] = route_df['seg_km'].fillna(0.0)
 route_df['cum_km'] = route_df['seg_km'].cumsum()
-
-print("\nTotale routelengte (km): ", route_df['cum_km'].iloc[-1],"\n")
-print(route_df.head())
 
 #findsegment
 def find_segment(route_df, dmg_km):
