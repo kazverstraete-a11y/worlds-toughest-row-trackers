@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 from datetime import date, datetime, timedelta
 from route import position_and_bearing_from_dmg
-print("route import OK")
+from route import read_kml_coordinates
+
 
 
 #ctx
@@ -220,6 +221,11 @@ else:
         f"(Score calculated by comparing with Thomas' 5-day average covered distance)"
     )
 
+#meteodata
+route_df = read_kml_coordinates('route.kml')
+lat, lon, brng, i = position_and_bearing_from_dmg(route_df, dmg_km)
+
+
 #bericht
 message = (
     f"\n"
@@ -263,7 +269,5 @@ plt.tight_layout()
 plt.savefig(f"outputs/d24_trend_{date_today}.png")
 plt.close()
 
-#meteodata
-lat, lon, brng, i = position_and_bearing_from_dmg(route_df, dmg_km)
 
 
