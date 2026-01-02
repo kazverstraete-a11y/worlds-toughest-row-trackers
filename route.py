@@ -25,12 +25,10 @@ def read_kml_coordinates(kml_path):
     
     if len(points) < 2:
         raise ValueError(f"Te weinig punten gevonden: {len(points)}")
-        
-    return points
 
-#variables
-coordinates = read_kml_coordinates('route.kml')
-route_df = pd.DataFrame(coordinates, columns=['lat', 'lon'])
+    route_df = pd.Dataframe(points, columns = ['lat',  'lon'])
+        
+    return route_df
 
 #cumulatieve afstand langsheen de route, haversine formule = afstand tussen twee punten op een bol(sferische afstand)
 def haversine_km(lat1, lon1, lat2, lon2):
