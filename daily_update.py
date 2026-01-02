@@ -394,9 +394,27 @@ def pick_nearest_hour(marine_json: dict, target_dt: datetime):
         "wave_direction": hourly["wave_direction"][best_i],
         "wave_period": hourly["wave_period"][best_i],
     }
-    
+
+def nearest_non_null(series, i, max_shift=3):
+    for d in range(max_shift + 1):
+        for j in (i-d, i+d):
+            if 0 <= j < len(series) and series[j] is not None:
+                return series[j]
+    return None
+
 marine = get_marine_hourly(lat, lon, timezone="UTC")
 marine_now = pick_nearest_hour(marine, now)
+
+wind_speed = marine_now["wind_speed_10m"]
+wind_dir   = marine_now["wind_direction_10m"]
+
+if wind_speed is None or wind_dir is None:
+    # fallback: zoek dichtstbijzijnde niet-None in hourly
+    hourly = marine["hourly"]
+    i = hourly["time"].index(marine_now["time"])
+
+    wind_speed = nearest_non_null(hourly["wind_speed_10m"], i)
+    wind_dir   = nearest_non_null(hourly["wind_direction_10m"], i)
 
 #bericht
 message = (
