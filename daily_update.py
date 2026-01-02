@@ -7,8 +7,10 @@ import os
 import matplotlib.pyplot as plt
 import xml.etree.ElementTree as ET
 import math
+import requests
 from pathlib import Path
 from datetime import date, datetime, timedelta
+
 
 #ctx
 ctx = ssl.create_default_context()
@@ -341,8 +343,60 @@ def position_and_bearing_from_dmg(route_df, dmg_km):
 
 lat, lon, brng, seg_i = position_and_bearing_from_dmg(route_df, dmg_km)
 
-print(lat, lon, brng, seg_i)
-print("progress %:", 100 * dmg_km / route_df['cum_km'].iloc[-1])
+#koppelen aan marine weather api 
+def get_marine_hourly(lat: float, lon: float, timezone: str = "UTC"):
+    """
+    Haalt uurlijkse wind + golfdata op via Open-Meteo Marine API.
+    Returns: dict (JSON response)
+    """
+    url = "https://marine-api.open-meteo.com/v1/marine"
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "hourly": ",".join([
+            "wind_speed_10m",
+            "wind_direction_10m",
+            "wave_height",
+            "wave_direction",
+            "wave_period",
+        ]),
+        "timezone": timezone,
+    }
+    
+    r = requests.get(url, params = params, timeout=30)
+    r.raise_for_status
+    return r.json()
+
+def pick_nearest_hour(marine_json: dict, target_dt: datetime):
+    """
+    marine_json: output van get_marine_hourly
+    target_dt: datetime in dezelfde timezone als je request (bv. UTC)
+    Returns: dict met de gekozen waarden
+    """
+    
+    hourly = marine_json["hourly"]
+    times = hourly["time"]
+    
+    target = target_dt.timestamp()
+    best_i = None
+    best_diff = None
+    for i, t in enumerate(times):
+        dt = datetime.fromisoformat(t)
+        diff = abs(dt.timestamp() - target)
+        if best_diff is None or diff < best_diff:
+            best_diff = diff
+            best_i = i
+    return {
+        "time": times[best_i],
+        "wind_speed_10m": hourly["wind_speed_10m"][best_i],
+        "wind_direction_10m": hourly["wind_direction_10m"][best_i],
+        "wave_height": hourly["wave_height"][best_i],
+        "wave_direction": hourly["wave_direction"][best_i],
+        "wave_period": hourly["wave_period"][best_i],
+    }
+    
+marine = get_marine_hourly(lat, lon, timezone="UTC")
+marine_now = pick_nearest_hour(marine, update_time_utc)
 
 #bericht
 message = (
@@ -370,6 +424,8 @@ print("dmg_km:", dmg_km)
 print("progress %:", dmg_km / route_df["cum_km"].iloc[-1] * 100)
 print("lat/lon:", lat, lon)
 print("bearing:", brng)
+print("Wind:", marine_now["wind_speed_10m"], "m/s @", marine_now["wind_direction_10m"], "°")
+print("Waves:", marine_now["wave_height"], "m,", marine_now["wave_period"], "s @", marine_now["wave_direction"], "°")
 
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
