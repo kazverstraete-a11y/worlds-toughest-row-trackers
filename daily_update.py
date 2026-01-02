@@ -455,17 +455,17 @@ if wind_speed is not None and wave_height is not None:
         wind_phrase = "a headwind for large parts of the day"
     else:
         wind_phrase = "mostly crosswinds"
-
-    sea_context_line = (
-        f"Wind & sea context: {wind_speed:.1f} m/s with {wind_phrase}, "
-        f"and waves around {wave_height:.1f} m.\n"
-    )
+        
+sea_context_line = (
+    f"Wind & sea context: {wind_speed:.1f} m/s with {wind_phrase} "
+    f"({along:+.1f} m/s along-course), and waves around {wave_height:.1f} m.\n"
+)
 
 if sea_score is not None and sea_label is not None:
     day_context_line = (
-        f"Overall sea conditions today were {sea_label} ({sea_score:.0f}/100), "
-        "which helps put today's covered distance into context.\n"
-    )
+    f"Sea state today: {sea_label} ({sea_score:.0f}/100) — "
+    "helpful context for today’s distance.\n"
+)
 
 #helper
 def fmt_km(x):
