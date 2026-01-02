@@ -496,10 +496,9 @@ message = (
     f"Thomas' data and figures since the previous update ({yesterday})\n\n"
     f"Solo rank: {today_solo_rank} position {delta_solo_str}\n"
     f"Overall rank: {today_overall_rank} position {delta_overall_str}\n\n"
-    f"{day_sentence}\n\n"
+    f"{day_sentence}\n"
     f"Thomas has now completed {percent_done}% of the entire journey 📊\n"
-    f"Total distance covered: {dmg_km} km\n"
-    f"...equivalent to {strokes} rowing strokes.\n"
+    f"Total distance covered: {dmg_km} km. That is {strokes} rowing strokes.\n\n"
     f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
     f"Distance remaining to Antigua: {fmt_km(distance_left)} km\n\n"
 )
