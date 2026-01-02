@@ -391,6 +391,14 @@ wind_now = pick_nearest_hour(
     keys=["wind_speed_10m", "wind_direction_10m"]
 )
 
+# --- Extract values (één bron van waarheid) ---
+wave_height    = marine_now.get("wave_height")
+wave_period    = marine_now.get("wave_period")
+wave_direction = marine_now.get("wave_direction")
+
+wind_speed = wind_now.get("wind_speed_10m")
+wind_dir   = wind_now.get("wind_direction_10m")   # wind FROM direction
+
 #windmeewindtegen
 def wrap180(deg):
     return (deg + 180) % 360 - 180
