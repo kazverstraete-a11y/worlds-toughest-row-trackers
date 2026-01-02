@@ -184,14 +184,6 @@ EMOJI = {
     5: "☀️"
 }
 emoji = EMOJI.get(score, "")
-        
-DAY_LABELS_CONDITIONS = {
-    1: "Challenging conditions",
-    2: "Headwinds and adverse seas",
-    3: "Neutral conditions",
-    4: "Favourable flow",
-    5: "Perfect day at sea",
-}
 
 DAY_LABELS_PERFORMANCE = {
     1: "Controlled day",
@@ -200,27 +192,6 @@ DAY_LABELS_PERFORMANCE = {
     4: "Very strong day",
     5: "Exceptional day",
 }
-
-#helper
-def fmt_km(x):
-    return f"{x:.1f}" if isinstance (x, (int, float)) else "n.v.t."
-
-if score == "n.v.t.":
-    day_sentence = (
-           "Today appears to be a strong day at sea.\n"
-            f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
-            "More data is needed before this effort can be objectively classified."
-    )
-else:
-    day_performance = DAY_LABELS_PERFORMANCE.get(score, "insufficient data")
-    day_conditions = DAY_LABELS_CONDITIONS.get(score, "unclear conditions")
-    day_sentence = (
-        f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
-        f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
-        f"Sea conditions (i.e. {day_conditions} ) may have influenced this effort.\n"
-        f"(Score calculated by comparing with Thomas' 5-day average covered distance)"
-    )
-
 #meteodata
 def read_kml_coordinates(kml_path):
     tree = ET.parse(kml_path)
@@ -424,51 +395,91 @@ wind_now = pick_nearest_hour(
 def wrap180(deg):
     return (deg + 180) % 360 - 180
 
-def wind_relation(wind_speed, wind_dir_from, course_deg):
-    # wind "TO" richting
+def wind_components(wind_speed, wind_dir_from, course_deg):
+    # wind_dir_from = waar wind VAN komt
     wind_to = (wind_dir_from + 180) % 360
-    
-    # hoekverschil tussen wind_to en koers
-    delta = wrap180(wind_to - course_deg) 
-    # component langs koers: + = mee, - = tegen
-    along = wind_speed * math.cos(math.radians(delta))
-    cross = wind_speed * math.sin(math.radians(delta))
-    return along, cross, delta
+    delta = wrap180(wind_to - course_deg)
+    along = wind_speed * math.cos(math.radians(delta))  # + = mee, - = tegen
+    return along, delta
 
-#seadifficulty
-def sea_difficulty(wave_h_m, headwind_mps):
-    # headwind_mps: alleen tegenwindcomponent (>=0)
-    # basis: golven wegen zwaar
-    score = 0
-    score += 25 * wave_h_m          # 2.0m -> 50
-    score += 4 * headwind_mps       # 5 m/s -> 20
-    
-    # clamp 0-100
-    return max(0, min(100, score))
+def sea_score_and_label(wave_h_m, headwind_mps):
+    # heel simpel, stabiel
+    score = 25 * (wave_h_m or 0) + 4 * (headwind_mps or 0)
+    score = max(0, min(100, score))
 
-#seascorelabel
-def sea_label(score):
-    if score < 20: return "favorable"
-    if score < 40: return "manageable"
-    if score < 60: return "tough"
-    if score < 80: return "very tough"
-    return "brutal"
+    if score < 20:
+        label = "Favourable"
+    elif score < 40:
+        label = "Manageable"
+    elif score < 60:
+        label = "Challenging"
+    elif score < 80:
+        label = "Very challenging"
+    else:
+        label = "Brutal"
 
-along, cross, delta = wind_relation(wind_speed, wind_dir, brng)
-headwind = max(0.0, -along)
-tailwind = max(0.0, along)
+    return score, label
 
-sea_score = sea_difficulty(wave_height, headwind)
-label = sea_label(sea_score)
+# default (als iets ontbreekt)
+sea_score = None
+sea_label = None
+along = None
+headwind = None
 
-sea_line = (
-    f"🌬️ Wind: {wind_speed:.1f} m/s ("
-    + ("tailwind" if along > 0 else "headwind" if along < 0 else "crosswind")
-    + f", along {along:+.1f} m/s)"
-    f" | 🌊 Waves: {wave_height:.2f} m @ {wave_period:.1f}s"
-    f" | Sea: {label} ({sea_score:.0f}/100)"
-)
+if wind_speed is not None and wind_dir is not None and brng is not None:
+    along, _ = wind_components(wind_speed, wind_dir, brng)
+    headwind = max(0.0, -along)  # enkel tegenwindcomponent
+else:
+    along = None
 
+if wave_height is not None:
+    sea_score, sea_label = sea_score_and_label(wave_height, headwind)
+
+sea_context_line = ""
+day_context_line = ""
+
+if wind_speed is not None and wave_height is not None:
+    if along is None:
+        wind_phrase = "variable winds"
+    elif along > 0.5:
+        wind_phrase = "some tailwind assistance"
+    elif along < -0.5:
+        wind_phrase = "a headwind for large parts of the day"
+    else:
+        wind_phrase = "mostly crosswinds"
+
+    sea_context_line = (
+        f"Wind & sea context: {wind_speed:.1f} m/s with {wind_phrase}, "
+        f"and waves around {wave_height:.1f} m.\n"
+    )
+
+if sea_score is not None and sea_label is not None:
+    day_context_line = (
+        f"Overall sea conditions today were {sea_label} ({sea_score:.0f}/100), "
+        "which helps put today's covered distance into context.\n"
+    )
+
+#helper
+def fmt_km(x):
+    return f"{x:.1f}" if isinstance (x, (int, float)) else "n.v.t."
+
+if score == "n.v.t.":
+    day_sentence = (
+        "Today appears to be a strong day at sea.\n"
+        f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
+        "More data is needed before this effort can be objectively classified.\n"
+    )
+else:
+    emoji = EMOJI.get(score, "")
+    day_performance = DAY_LABELS_PERFORMANCE.get(score, "insufficient data")
+
+    day_sentence = (
+        f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
+        f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
+        f"{sea_context_line}"
+        f"{day_context_line}"
+        "(Score calculated by comparing with Thomas' 5-day average covered distance)\n"
+    )
 
 #bericht
 message = (
@@ -484,10 +495,6 @@ message = (
     f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
     f"Distance remaining to Antigua: {fmt_km(distance_left)} km\n\n"
 )
-
-print("Wind:", wind_now["wind_speed_10m"], "m/s @", wind_now["wind_direction_10m"], "°")
-print("Waves:", marine_now["wave_height"], "m,", marine_now["wave_period"], "s @", marine_now["wave_direction"], "°")
-
 
 txtfile = Path("outputs") / f"update_{today}.txt"
 with open(txtfile, "w") as handle: 
