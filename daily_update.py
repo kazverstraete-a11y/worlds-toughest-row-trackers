@@ -427,7 +427,7 @@ print("bearing:", brng)
 print("Wind:", marine_now["wind_speed_10m"], "m/s @", marine_now["wind_direction_10m"], "°")
 print("Waves:", marine_now["wave_height"], "m,", marine_now["wave_period"], "s @", marine_now["wave_direction"], "°")
 
-print(marine_json["hourly"].keys())
+print(marine["hourly"].keys())
 
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
