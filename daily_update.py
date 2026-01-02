@@ -420,6 +420,56 @@ wind_now = pick_nearest_hour(
     keys=["wind_speed_10m", "wind_direction_10m"]
 )
 
+#windmeewindtegen
+def wrap180(deg):
+    return (deg + 180) % 360 - 180
+
+def wind_relation(wind_speed, wind_dir_from, course_deg):
+    # wind "TO" richting
+    wind_to = (wind_dir_from + 180) % 360
+    
+    # hoekverschil tussen wind_to en koers
+    delta = wrap180(wind_to - course_deg) 
+    # component langs koers: + = mee, - = tegen
+    along = wind_speed * math.cos(math.radians(delta))
+    cross = wind_speed * math.sin(math.radians(delta))
+    return along, cross, delta
+
+#seadifficulty
+def sea_difficulty(wave_h_m, headwind_mps):
+    # headwind_mps: alleen tegenwindcomponent (>=0)
+    # basis: golven wegen zwaar
+    score = 0
+    score += 25 * wave_h_m          # 2.0m -> 50
+    score += 4 * headwind_mps       # 5 m/s -> 20
+    
+    # clamp 0-100
+    return max(0, min(100, score))
+
+#seascorelabel
+def sea_label(score):
+    if score < 20: return "favorable"
+    if score < 40: return "manageable"
+    if score < 60: return "tough"
+    if score < 80: return "very tough"
+    return "brutal"
+
+along, cross, delta = wind_relation(wind_speed, wind_dir, brng)
+headwind = max(0.0, -along)
+tailwind = max(0.0, along)
+
+sea_score = sea_difficulty(wave_height, headwind)
+label = sea_label(sea_score)
+
+sea_line = (
+    f"🌬️ Wind: {wind_speed:.1f} m/s ("
+    + ("tailwind" if along > 0 else "headwind" if along < 0 else "crosswind")
+    + f", along {along:+.1f} m/s)"
+    f" | 🌊 Waves: {wave_height:.2f} m @ {wave_period:.1f}s"
+    f" | Sea: {label} ({sea_score:.0f}/100)"
+)
+
+
 #bericht
 message = (
     f"\n"
