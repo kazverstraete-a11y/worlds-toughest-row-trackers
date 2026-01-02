@@ -7,6 +7,8 @@ import os
 import matplotlib.pyplot as plt
 from pathlib import Path
 from datetime import date, datetime, timedelta
+from route import position_and_bearing_from_dmg
+print("route import OK")
 
 
 #ctx
@@ -260,5 +262,8 @@ plt.legend()
 plt.tight_layout()
 plt.savefig(f"outputs/d24_trend_{date_today}.png")
 plt.close()
+
+#meteodata
+lat, lon, brng, i = position_and_bearing_from_dmg(route_df, dmg_km)
 
 
