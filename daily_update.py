@@ -100,7 +100,7 @@ START_TIME = datetime(
     hour = 12,
     minute = 18,
 )
-now = datetime.now(timezone.utc)
+now = datetime.now()
 now_strf = now.strftime("%Y-%m-%d")
 date_today = date.today().isoformat()
 yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d-%H:%M")
