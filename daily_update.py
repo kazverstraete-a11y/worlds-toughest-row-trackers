@@ -408,7 +408,7 @@ def get_wind_hourly(lat, lon, timezone="UTC"):
     return r.json()
 
 #weather variables
-marine = get_marine_hourly(lat, lon, timezone="UTC")
+marine_json = get_marine_hourly(lat, lon, timezone="UTC")
 marine_now = pick_nearest_hour(
     marine_json, now,
     keys=["wave_height", "wave_direction", "wave_period"]
