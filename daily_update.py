@@ -339,6 +339,8 @@ def position_and_bearing_from_dmg(route_df, dmg_km):
     )
     return lat, lon, brng, i
 
+lat, lon, brng, seg_i = position_and_bearing_from_dmg(route_df, dmg_km)
+
 print(lat, lon, brng, seg_i)
 print("progress %:", 100 * dmg_km / route_df['cum_km'].iloc[-1])
 
