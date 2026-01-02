@@ -396,7 +396,7 @@ def pick_nearest_hour(marine_json: dict, target_dt: datetime):
     }
     
 marine = get_marine_hourly(lat, lon, timezone="UTC")
-marine_now = pick_nearest_hour(marine, update_time_utc)
+marine_now = pick_nearest_hour(marine, now)
 
 #bericht
 message = (
