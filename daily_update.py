@@ -402,19 +402,28 @@ def nearest_non_null(series, i, max_shift=3):
                 return series[j]
     return None
 
+#wind
+def get_wind_hourly(lat, lon, timezone="UTC"):
+    url = "https://api.open-meteo.com/v1/forecast"
+    params = {
+        "latitude": lat,
+        "longitude": lon,
+        "hourly": "wind_speed_10m,wind_direction_10m",
+        "timezone": timezone,
+    }
+    r = requests.get(url, params=params, timeout=30)
+    r.raise_for_status()
+    return r.json()
+
+#weather variables
 marine = get_marine_hourly(lat, lon, timezone="UTC")
 marine_now = pick_nearest_hour(marine, now)
 
-wind_speed = marine_now["wind_speed_10m"]
-wind_dir   = marine_now["wind_direction_10m"]
+wind_json = get_wind_hourly(lat, lon, timezone="UTC")
+wind_now = pick_nearest_hour(wind_json, now)
 
-if wind_speed is None or wind_dir is None:
-    # fallback: zoek dichtstbijzijnde niet-None in hourly
-    hourly = marine["hourly"]
-    i = hourly["time"].index(marine_now["time"])
-
-    wind_speed = nearest_non_null(hourly["wind_speed_10m"], i)
-    wind_dir   = nearest_non_null(hourly["wind_direction_10m"], i)
+wind_speed = wind_now["wind_speed_10m"]
+wind_dir   = wind_now["wind_direction_10m"]
 
 #bericht
 message = (
@@ -431,21 +440,15 @@ message = (
     f"Distance remaining to Antigua: {fmt_km(distance_left)} km\n\n"
 )
 
+print("Wind:", wind_speed, "m/s @", wind_dir, "°")
+print("Waves:", marine_now["wave_height"], "m,", marine_now["wave_period"], "s @", marine_now["wave_direction"], "°")
+
+
 txtfile = Path("outputs") / f"update_{today}.txt"
 with open(txtfile, "w") as handle: 
     handle.write(message)
 
 print(message)
-
-print("route_len_km:", route_df["cum_km"].iloc[-1])
-print("dmg_km:", dmg_km)
-print("progress %:", dmg_km / route_df["cum_km"].iloc[-1] * 100)
-print("lat/lon:", lat, lon)
-print("bearing:", brng)
-print("Wind:", marine_now["wind_speed_10m"], "m/s @", marine_now["wind_direction_10m"], "°")
-print("Waves:", marine_now["wave_height"], "m,", marine_now["wave_period"], "s @", marine_now["wave_direction"], "°")
-print("wind speed: ", wind_speed)
-print("wind direction: ", wind_dir)
 
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
