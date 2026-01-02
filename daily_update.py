@@ -7,10 +7,6 @@ import os
 import matplotlib.pyplot as plt
 from pathlib import Path
 from datetime import date, datetime, timedelta
-from route import position_and_bearing_from_dmg
-from route import read_kml_coordinates
-
-
 
 #ctx
 ctx = ssl.create_default_context()
@@ -341,6 +337,8 @@ def position_and_bearing_from_dmg(route_df, dmg_km):
     )
     return lat, lon, brng, i
 
+print(lat, lon, brng, seg_i)
+print("progress %:", 100 * dmg_km / route_df['cum_km'].iloc[-1])
 
 #bericht
 message = (
