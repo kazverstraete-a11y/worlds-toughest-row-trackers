@@ -482,11 +482,11 @@ else:
     day_performance = DAY_LABELS_PERFORMANCE.get(score, "insufficient data")
 
     day_sentence = (
-        f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
         f"Today appears to be a {day_performance}{emoji} (score {score}/5).\n"
+        "(Score calculated by comparing with Thomas' 5-day average covered distance)\n\n"
+        f"Thomas covered {fmt_km(d24_today_km)} km over the past 24 hours.\n"
         f"{sea_context_line}"
         f"{day_context_line}"
-        "(Score calculated by comparing with Thomas' 5-day average covered distance)\n"
     )
 
 #bericht
@@ -499,7 +499,7 @@ message = (
     f"{day_sentence}\n\n"
     f"Thomas has now completed {percent_done}% of the entire journey 📊\n"
     f"Total distance covered: {dmg_km} km\n"
-    f"...equivalent to {strokes} rowing strokes.\n\n"
+    f"...equivalent to {strokes} rowing strokes.\n"
     f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
     f"Distance remaining to Antigua: {fmt_km(distance_left)} km\n\n"
 )
