@@ -365,6 +365,12 @@ with open(txtfile, "w") as handle:
 
 print(message)
 
+print("route_len_km:", route_df["cum_km"].iloc[-1])
+print("dmg_km:", dmg_km)
+print("progress %:", dmg_km / route_df["cum_km"].iloc[-1] * 100)
+print("lat/lon:", lat, lon)
+print("bearing:", brng)
+
 #trendvisual afgelegde kms per 24u
 plt.figure(figsize=(8, 4))
 plt.plot(df["date"], df["d24_km"], marker="o", label="24h distance")
