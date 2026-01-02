@@ -281,7 +281,7 @@ def find_segment(route_df, dmg_km):
         raise ValueError("Dmg_km is negatief")
         
     i = route_df[route_df['cum_km'] <= dmg_km].index.max()
-    if i is None or i is == len(route_df)-1:
+    if i is None or i == len(route_df)-1:
         raise ValueError("Kon geen geldig segment vinden (dmg_km buiten route?).")
     return i, dmg_km
 
@@ -291,7 +291,7 @@ def interpolate_position(route_df, dmg_km):
     """
     Interpoleert positie op basis van dmg_km (totale afstand sinds start).
     Returns: (lat, lon, i) waarbij i het segment is.
-    """"
+    """
     
     i, dmg_km = find_segment(route_df, dmg_km)
     km0 = route_df.loc[i, 'cum_km']
