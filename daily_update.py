@@ -367,33 +367,25 @@ def get_marine_hourly(lat: float, lon: float, timezone: str = "UTC"):
     r.raise_for_status
     return r.json()
 
-def pick_nearest_hour(marine_json: dict, target_dt: datetime):
-    """
-    marine_json: output van get_marine_hourly
-    target_dt: datetime in dezelfde timezone als je request (bv. UTC)
-    Returns: dict met de gekozen waarden
-    """
-    
-    hourly = marine_json["hourly"]
+def pick_nearest_hour(api_json: dict, target_dt: datetime, keys: list[str]):
+    hourly = api_json["hourly"]
     times = hourly["time"]
-    
+
     target = target_dt.timestamp()
     best_i = None
     best_diff = None
+
     for i, t in enumerate(times):
         dt = datetime.fromisoformat(t)
         diff = abs(dt.timestamp() - target)
         if best_diff is None or diff < best_diff:
             best_diff = diff
             best_i = i
-    return {
-        "time": times[best_i],
-        "wind_speed_10m": hourly["wind_speed_10m"][best_i],
-        "wind_direction_10m": hourly["wind_direction_10m"][best_i],
-        "wave_height": hourly["wave_height"][best_i],
-        "wave_direction": hourly["wave_direction"][best_i],
-        "wave_period": hourly["wave_period"][best_i],
-    }
+
+    out = {"time": times[best_i]}
+    for k in keys:
+        out[k] = hourly.get(k, [None] * len(times))[best_i]
+    return out
 
 def nearest_non_null(series, i, max_shift=3):
     for d in range(max_shift + 1):
@@ -417,13 +409,16 @@ def get_wind_hourly(lat, lon, timezone="UTC"):
 
 #weather variables
 marine = get_marine_hourly(lat, lon, timezone="UTC")
-marine_now = pick_nearest_hour(marine, now)
+marine_now = pick_nearest_hour(
+    marine_json, now,
+    keys=["wave_height", "wave_direction", "wave_period"]
+)
 
 wind_json = get_wind_hourly(lat, lon, timezone="UTC")
-wind_now = pick_nearest_hour(wind_json, now)
-
-wind_speed = wind_now["wind_speed_10m"]
-wind_dir   = wind_now["wind_direction_10m"]
+wind_now = pick_nearest_hour(
+    wind_json, now,
+    keys=["wind_speed_10m", "wind_direction_10m"]
+)
 
 #bericht
 message = (
@@ -440,7 +435,7 @@ message = (
     f"Distance remaining to Antigua: {fmt_km(distance_left)} km\n\n"
 )
 
-print("Wind:", wind_speed, "m/s @", wind_dir, "°")
+print("Wind:", wind_now["wind_speed_10m"], "m/s @", wind_now["wind_direction_10m"], "°")
 print("Waves:", marine_now["wave_height"], "m,", marine_now["wave_period"], "s @", marine_now["wave_direction"], "°")
 
 
