@@ -57,7 +57,7 @@ except:
     pass
 
 #data
-TOTAL_DISTANCE_KM = 4800
+TOTAL_DISTANCE_KM = 4948
 METERS_TO_KM = 1 / 1000
 
 d24_today_km = round(thomas['d24'] * METERS_TO_KM, 2)
