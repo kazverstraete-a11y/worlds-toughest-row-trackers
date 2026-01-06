@@ -1,6 +1,6 @@
 
 🌊 World's Toughest Row – Daily update – 2026-01-06
-Thomas' data and figures since the previous update (2026-01-05-15:48)
+Thomas' data and figures since the previous update (2026-01-05-19:16)
 
 Solo rank: 2 position (Same place)
 Overall rank: 18 position (Same place)
@@ -8,13 +8,12 @@ Overall rank: 18 position (Same place)
 Today appears to be a Very strong day🌤️ (score 4/5).
 (Score calculated by comparing with Thomas' 5-day average covered distance)
 
-Thomas covered 102.8 km over the past 24 hours.
-Wind & sea context: 23.6 m/s with some tailwind assistance (+13.8 m/s along-course), and waves around 1.8 m.
-Sea state today: Challenging (44/100) — helpful context for today’s distance.
+Thomas covered 103.9 km over the past 24 hours.
+Wind & sea context: 24.4 m/s with a clear tailwind with significant crosswind, waves around 1.7 m (period 9.1s).Sea state today: Very challenging (71/100) — helpful context for today’s distance.
 
-Thomas has now completed 51.42% of the entire journey 📊
-Total distance covered: 2544.07 km. That is 636017 rowing strokes.
+Thomas has now completed 51.81% of the entire journey 📊
+Total distance covered: 2563.35 km. That is 640837 rowing strokes.
 
-He has been at sea for 23 days, 3.5 hours and 30 seconds aboard *Boiteau*.
-Distance remaining to Antigua: 2403.9 km
+He has been at sea for 23 days, 7.0 hours and 58 seconds aboard *Boiteau*.
+Distance remaining to Antigua: 2384.7 km
 
