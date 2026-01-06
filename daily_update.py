@@ -512,8 +512,9 @@ if wind_speed is not None and along is not None:
             waves_phrase += f" (period {float(wave_period):.1f}s)"
     
     sea_context_line = (
-        f"Wind & sea context: {float(wind_speed):.1f} m/s with {wind_phrase}, "
-        f"{waves_phrase}."
+        f"Wind & sea context:\n" 
+        f"    {float(wind_speed):.1f} m/s with {wind_phrase},\n"
+        f"    {waves_phrase}."
     )
 
 if sea_score is not None and sea_label is not None:
