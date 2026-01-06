@@ -426,7 +426,7 @@ def sea_score_and_label(wave_h_m, wave_period_s, wave_dir_from,course_deg,wind_s
     #wave steepness, chop: korte golven zijn lastiger: <6s is vrij choppy
     if wave_period_s is None:
         wave_period_s = 0.0
-    chop = max(0.0, 7.0 - float(wave_period_s) #groeit dus als de wave period korter wordt
+    chop = max(0.0, 7.0 - float(wave_period_s)) #groeit dus als de wave period korter wordt
     #swell angle vs cours (van op de zijkant is lastiger
     if wave_dir_from is None:
         swell_angle_pen = 0.0
