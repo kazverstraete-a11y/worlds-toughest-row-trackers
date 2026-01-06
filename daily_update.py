@@ -394,7 +394,7 @@ wind_now = pick_nearest_hour(
 # --- Extract values (één bron van waarheid) ---
 wave_height    = marine_now.get("wave_height")
 wave_period    = marine_now.get("wave_period")
-wave_direction = marine_now.get("wave_direction")
+wave_dir = marine_now.get("wave_direction")
 
 wind_speed = wind_now.get("wind_speed_10m")
 wind_dir   = wind_now.get("wind_direction_10m")   # wind FROM direction
@@ -407,13 +407,45 @@ def wind_components(wind_speed, wind_dir_from, course_deg):
     # wind_dir_from = waar wind VAN komt
     wind_to = (wind_dir_from + 180) % 360
     delta = wrap180(wind_to - course_deg)
-    along = wind_speed * math.cos(math.radians(delta))  # + = mee, - = tegen
-    return along, delta
+    along = wind_speed * math.cos(math.radians(delta))# + = mee, - = tegen
+    cross = abs(wind_speed * math.sin(math.radians(delta)))
+    return along, cross, delta
 
-def sea_score_and_label(wave_h_m, headwind_mps):
-    # heel simpel, stabiel
-    score = 25 * (wave_h_m or 0) + 4 * (headwind_mps or 0)
-    score = max(0, min(100, score))
+def sea_score_and_label(wave_h_m, wave_period_s, wave_dir_from,course_deg,wind_speed,along, crosswind):
+    """
+    Score 0..100 (hoger = zwaarder).
+    Integreert:
+      a) wind_speed via along/cross ratios
+      b) windrichting vs koers (along + cross)
+      c) golfperiode + golfrichting vs koers
+    """
+    #1 headwind penalty
+    headwind = max(0.0, -along)
+    #2 crosswind penalty, minder zwaar dan headwind, maar toch geduw
+    crosswind_pen = crosswind
+    #wave steepness, chop: korte golven zijn lastiger: <6s is vrij choppy
+    if wave_period_s is None:
+        wave_period_s = 0.0
+    chop = max(0.0, 7.0 - float(wave_period_s) #groeit dus als de wave period korter wordt
+    #swell angle vs cours (van op de zijkant is lastiger
+    if wave_dir_from is None:
+        swell_angle_pen = 0.0
+    else:
+        swell_to = (float(wave_dir_from) + 180) ‰ 360
+        swell_delta = abs(wrap180(swell_to - float(course_deg))) #penalize vooral bij 90
+        swell_side_factor = math.sin(math.radians(swell_delta)) ** 2
+        swell_angle_pen = swell_side_factor * (wave_h_m or 0.0)
+        
+        # --- Combineer naar score ---
+    # Richtgewichten: waves dominant, headwind tweede, cross/chop extra nuance
+    score = 0.0
+    score += 22.0 * (wave_h_m or 0.0)          # hoogte
+    score += 3.5 * headwind                     # tegenwind
+    score += 1.5 * crosswind_pen                # zijwind
+    score += 6.0 * chop                         # korte periode
+    score += 10.0 * swell_angle_pen             # zij-swell extra zwaar
+
+    score = max(0.0, min(100.0, score))
 
     if score < 20:
         label = "Favourable"
@@ -432,40 +464,63 @@ def sea_score_and_label(wave_h_m, headwind_mps):
 sea_score = None
 sea_label = None
 along = None
-headwind = None
+delta = None
+crosswind = None
 
 if wind_speed is not None and wind_dir is not None and brng is not None:
-    along, _ = wind_components(wind_speed, wind_dir, brng)
-    headwind = max(0.0, -along)  # enkel tegenwindcomponent
-else:
-    along = None
+    along, crosswind, delta = wind_components(float(wind_speed), float(wind_dir), float(brng))
 
-if wave_height is not None:
-    sea_score, sea_label = sea_score_and_label(wave_height, headwind)
+if wave_height is not None and brng is not None and wind_speed is not None and along is not None:
+    sea_score, sea_label = sea_score_and_label(
+        wave_h_m=float(wave_height),
+        wave_period_s=float(wave_period) if wave_period is not None else None,
+        wave_dir_from=float(wave_dir) if wave_dir is not None else None,
+        course_deg=float(brng),
+        wind_speed=float(wind_speed),
+        along=float(along),
+        crosswind=float(crosswind) if crosswind is not None else 0.0,
+    )
 
 sea_context_line = ""
 day_context_line = ""
 
-if wind_speed is not None and wave_height is not None:
-    if along is None:
-        wind_phrase = "variable winds"
-    elif along > 0.5:
+if wind_speed is not None and along is not None:
+    ws = max(0.1, float(wind_speed))  # avoid /0
+    along_ratio = float(along) / ws   # -1..+1
+    cross_ratio = (float(crosswind) / ws) if crosswind is not None else 0.0
+
+    # wind tekst
+    if along_ratio > 0.35:
+        wind_phrase = "a clear tailwind"
+    elif along_ratio > 0.10:
         wind_phrase = "some tailwind assistance"
-    elif along < -0.5:
-        wind_phrase = "a headwind for large parts of the day"
+    elif along_ratio < -0.35:
+        wind_phrase = "a strong headwind"
+    elif along_ratio < -0.10:
+        wind_phrase = "a headwind for parts of the day"
     else:
-        wind_phrase = "mostly crosswinds"
+        wind_phrase = "mostly cross/variable winds"
         
-sea_context_line = (
-    f"Wind & sea context: {wind_speed:.1f} m/s with {wind_phrase} "
-    f"({along:+.1f} m/s along-course), and waves around {wave_height:.1f} m.\n"
-)
+    if cross_ratio > 0.60:
+        wind_phrase += " with significant crosswind"
+    
+    # waves tekst
+    waves_phrase = ""
+    if wave_height is not None:
+        waves_phrase = f"waves around {float(wave_height):.1f} m"
+        if wave_period is not None:
+            waves_phrase += f" (period {float(wave_period):.1f}s)"
+    
+    sea_context_line = (
+        f"Wind & sea context: {float(wind_speed):.1f} m/s with {wind_phrase}, "
+        f"{waves_phrase}."
+    )
 
 if sea_score is not None and sea_label is not None:
     day_context_line = (
-    f"Sea state today: {sea_label} ({sea_score:.0f}/100) — "
-    "helpful context for today’s distance.\n"
-)
+        f"Sea state today: {sea_label} ({sea_score:.0f}/100) — "
+        "helpful context for today’s distance.\n"
+    )
 
 #helper
 def fmt_km(x):
