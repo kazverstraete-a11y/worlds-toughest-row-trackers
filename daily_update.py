@@ -431,7 +431,7 @@ def sea_score_and_label(wave_h_m, wave_period_s, wave_dir_from,course_deg,wind_s
     if wave_dir_from is None:
         swell_angle_pen = 0.0
     else:
-        swell_to = (float(wave_dir_from) + 180) ‰ 360
+        swell_to = (float(wave_dir_from) + 180) % 360
         swell_delta = abs(wrap180(swell_to - float(course_deg))) #penalize vooral bij 90
         swell_side_factor = math.sin(math.radians(swell_delta)) ** 2
         swell_angle_pen = swell_side_factor * (wave_h_m or 0.0)
