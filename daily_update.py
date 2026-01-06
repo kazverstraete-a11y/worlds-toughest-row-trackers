@@ -507,20 +507,21 @@ if wind_speed is not None and along is not None:
     # waves tekst
     waves_phrase = ""
     if wave_height is not None:
-        waves_phrase = f"waves around {float(wave_height):.1f} m"
+        waves_phrase = f"Waves around {float(wave_height):.1f} m"
         if wave_period is not None:
             waves_phrase += f" (period {float(wave_period):.1f}s)"
     
     sea_context_line = (
         f"Wind & sea context:\n" 
-        f"    {float(wind_speed):.1f} m/s with {wind_phrase},\n"
-        f"    {waves_phrase}."
+        f"    {float(wind_speed):.1f} m/s with {wind_phrase}.\n"
+        f"    {waves_phrase}.\n"
     )
 
 if sea_score is not None and sea_label is not None:
     day_context_line = (
         f"Sea state today: {sea_label} ({sea_score:.0f}/100) — "
         "helpful context for today’s distance.\n"
+        "(score based up wave height, wind(head & cross), chop, swell°)\n"
     )
 
 #helper
