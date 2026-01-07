@@ -2,7 +2,7 @@ name: World’s Toughest Row – Daily Update
 
 on:
   schedule:
-    - cron: "5 15 * * *"   # elke 4 uur (UTC)
+    - cron: "5 19 * * *"   # elke 4 uur (UTC)
   workflow_dispatch: {}     # manueel starten
 
 jobs:
