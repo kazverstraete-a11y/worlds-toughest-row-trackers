@@ -59,6 +59,8 @@ It is a compact example of how raw external data can be transformed into structu
 Daily 24h covered distance over time, compared to a rolling 5-day average.  
 This makes it easier to distinguish single strong days from broader performance trends during the crossing.
 
+![Alt text](https://github.com/kazverstraete-a11y/worlds-toughest-row-trackers/blob/main/outputs/d24_trend_2026-01-17.png)
+
 
 ## Daily update output includes
 
