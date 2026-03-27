@@ -53,8 +53,8 @@ try:
     yesterday_thomas = next(team for team in yesterday_teams_o if team['id'] == THOMAS_ID)
     yesterday_teams_s = yesterday_data['tags'][1]['teams']
     yesterday_thomas_solo = next(team for team in yesterday_teams_s if team['id'] == THOMAS_ID)
-except: 
-    pass
+except FileNotFoundError:
+    yesterday_data = None
 
 #data
 TOTAL_DISTANCE_KM = 4948
@@ -107,7 +107,7 @@ yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d-%H:%M")
 elapsed = now - START_TIME
 days = elapsed.days
 hours = round(elapsed.seconds / 3600, 1)
-seconds = int((elapsed.seconds % 3600) / 60)
+minutes = int((elapsed.seconds % 3600) / 60)
 
 #deltas
 d24_yesterday_km = round((yesterday_thomas['d24']*METERS_TO_KM), 2)
@@ -335,7 +335,7 @@ def get_marine_hourly(lat: float, lon: float, timezone: str = "UTC"):
     }
     
     r = requests.get(url, params = params, timeout=30)
-    r.raise_for_status
+    r.raise_for_status()
     return r.json()
 
 def pick_nearest_hour(api_json: dict, target_dt: datetime, keys: list[str]):
@@ -556,7 +556,7 @@ message = (
     f"{day_sentence}\n"
     f"Thomas has now completed {percent_done}% of the entire journey 📊\n"
     f"Total distance covered: {dmg_km} km. That is {strokes} rowing strokes.\n\n"
-    f"He has been at sea for {days} days, {hours} hours and {seconds} seconds aboard *Boiteau*.\n"
+    f"He has been at sea for {days} days, {hours} hours and {minutes} minutes aboard *Boiteau*.\n"
     f"Distance remaining to Antigua: {fmt_km(distance_left)} km\n\n"
 )
 
