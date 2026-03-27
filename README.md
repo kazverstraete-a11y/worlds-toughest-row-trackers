@@ -4,7 +4,6 @@ A Python project that fetches live leaderboard data from the World’s Toughest 
 
 The result is an automated daily update that combines performance, ranking, progression, and sea-state conditions in a follower-friendly format.
 
----
 
 ## What it does
 
@@ -29,7 +28,6 @@ The result is an automated daily update that combines performance, ranking, prog
   - a performance trend chart
 - Saves daily snapshots (`data/`) and ready-to-share texts (`outputs/`)
 
----
 
 ## Pipeline overview
 
@@ -55,7 +53,6 @@ The result is an automated daily update that combines performance, ranking, prog
 - Automated text generation from live race + weather data
 - GitHub Actions scheduling + auto-commits
 
----
 
 ## Why this project matters
 
@@ -63,7 +60,6 @@ This project goes beyond simple race tracking. It combines live competition data
 
 It is a compact example of how raw external data can be transformed into structured, domain-aware communication.
 
----
 
 ## Example visual
 
@@ -73,7 +69,6 @@ The chart highlights momentum rather than single performances, making it easy to
 
 ![Alt text](https://github.com/kazverstraete-a11y/worlds-toughest-row-trackers/blob/main/outputs/d24_trend_2026-01-17.png)
 
----
 
 ## Daily update output includes
 
@@ -90,7 +85,6 @@ The chart highlights momentum rather than single performances, making it easy to
 - elapsed time at sea
 - remaining distance to Antigua
 
----
 
 ## Example output
 ```text
