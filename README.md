@@ -73,11 +73,6 @@ The chart highlights momentum rather than single performances, making it easy to
 
 ![Alt text](https://github.com/kazverstraete-a11y/worlds-toughest-row-trackers/blob/main/outputs/d24_trend_2026-01-17.png)
 
-## Note
-
-The race started on 2025-12-14, but this tracker was built after the event had already started.  
-As a result, the historical trend begins from the first stored local snapshot rather than from race day 1.
-
 ---
 
 ## Daily update output includes
@@ -118,7 +113,15 @@ Sea state today: Very challenging (75/100) — helpful context for today’s dis
 Thomas has now completed 82.59% of the entire journey 📊
 Total distance covered: 4086.63 km. That is 1021657 rowing strokes.
 
-He has been at sea for 35 days, 7.2 hours and 10 seconds aboard *Boiteau*.
+He has been at sea for 35 days, 7.2 hours and 10 minutes aboard *Boiteau*.
 Distance remaining to Antigua: 861.4 km
 
+```
+
+---
+
+## Note
+
+The race started on 2025-12-14, but this tracker was built after the event had already started.  
+As a result, the historical trend begins from the first stored local snapshot rather than from race day 1.
 
