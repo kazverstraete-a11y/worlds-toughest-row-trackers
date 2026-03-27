@@ -59,6 +59,7 @@ It is a compact example of how raw external data can be transformed into structu
 Daily 24h covered distance over time, compared to a rolling 5-day average.  
 This makes it easier to distinguish single strong days from broader performance trends during the crossing.
 
+
 ## Daily update output includes
 
 - current solo and overall rank
@@ -76,20 +77,26 @@ This makes it easier to distinguish single strong days from broader performance 
 
 ## Example output
 ```text
-[🌊 World's Toughest Row - Dagelijkse update van 2025-12-22 
-Thomas'statistieken sinds vorige update (2025-12-21-08:59) 
+🌊 World's Toughest Row – Daily update – 2026-01-18
+Thomas' data and figures since the previous update (2026-01-17-19:28)
 
-Solo klassement: 2e positie 
-Algemeen klassement: 17e positie  
+Solo rank: 2 position (Same place)
+Overall rank: 17 position (Same place)
 
-Afstand geroeid laatste 24u: 114.4 kilometer 
-Totale afgelegde afstand: 1015.07 kilometer
-.....omgerekend zijn dat 253767 roeislagen 
+Today appears to be a Very strong day🌤️ (score 4/5).
+(Score calculated by comparing with Thomas' 5-day average covered distance)
 
-Thomas heeft al 21.15% van het hele avontuur voltooid 📊
-Hij spendeert al 7 dagen 20.7 uur en 41 seconden op den 'Boiteau'
+Thomas covered 157.2 km over the past 24 hours.
+Wind & sea context:
+    38.2 km/h with a clear tailwind.
+    Waves around 3.2 m (period 8.1s).
+Sea state today: Very challenging (75/100) — helpful context for today’s distance.
+(score based up wave height, wind(head & cross), chop, swell°)
 
+Thomas has now completed 82.59% of the entire journey 📊
+Total distance covered: 4086.63 km. That is 1021657 rowing strokes.
 
-Voet aan wal op Antigua in.... 3784.93 kilometer]
+He has been at sea for 35 days, 7.2 hours and 10 seconds aboard *Boiteau*.
+Distance remaining to Antigua: 861.4 km
 
 
