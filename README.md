@@ -4,49 +4,58 @@ A Python project that fetches live leaderboard data from the World’s Toughest 
 
 The result is an automated daily update that combines performance, ranking, progression, and sea-state conditions in a follower-friendly format.
 
+---
+
 ## What it does
+
+- Fetches live leaderboard JSON data and stores daily snapshots locally
+- Extracts Thomas’ metrics using team ID
 - Tracks:
   - 24h distance covered
   - total distance covered
   - progress percentage
   - remaining distance
   - solo and overall ranking
-  - day-to-day rank changes
+  - day-to-day ranking changes
   - elapsed time since race start
 - Reconstructs historical 24h performance over time
-- Computes a rolling 5-day average for daily distance
-- Interpolates current boat position from a KML race route
-- Derives route bearing at the athlete’s current position
-- Pulls live wind and marine conditions via Open-Meteo APIs
-- Builds a sea-state difficulty score using wind, crosswind, swell, wave height, and wave period
+- Computes a rolling 5-day average for daily covered distance
+- Interpolates current boat position along the official KML route
+- Calculates route bearing at the current position
+- Pulls live wind and marine weather data via Open-Meteo APIs
+- Builds a sea-state difficulty score based on wind, crosswind, swell, wave height, and wave period
 - Generates:
   - a daily text update
-  - a trend chart of 24h distance vs rolling average
+  - a performance trend chart
 - Saves daily snapshots (`data/`) and ready-to-share texts (`outputs/`)
 
-## Tech highlights
-
-- Python (json, pathlib, datetime, requests, pandas, matplotlib)
-- Historical snapshot persistence for day-to-day race tracking
-- Nested JSON parsing and metric extraction
-- Geospatial route parsing from KML
-- Position interpolation along a cumulative route distance
-- Bearing calculation based on current route segment
-- Marine weather enrichment through external APIs
-- Custom sea-state scoring logic
-- Automated text generation and chart export
-- GitHub Actions scheduling + auto-commits
+---
 
 ## Pipeline overview
 
 1. Fetch live leaderboard JSON
-2. Store daily snapshot locally
-3. Extract Thomas’ current metrics
-4. Rebuild historical daily 24h-distance series
-5. Interpolate current position along the official route
-6. Enrich with marine and wind conditions
-7. Compute sea-state context score
-8. Export daily text update and trend chart
+2. Store daily snapshot in `data/`
+3. Extract Thomas’ race metrics
+4. Rebuild the historical daily 24h-distance series
+5. Interpolate boat position along the official route
+6. Enrich the current position with wind and marine conditions
+7. Compute a sea-state context score
+8. Export a daily text update and chart to `outputs/`
+
+## Tech highlights
+
+- Python
+- `requests`, `json`, `pathlib`, `datetime`
+- `pandas` for time series reconstruction
+- `matplotlib` for trend visualization
+- KML route parsing with `xml.etree.ElementTree`
+- Haversine-based cumulative route distance
+- Position interpolation and bearing calculation
+- External weather enrichment through Open-Meteo APIs
+- Automated text generation from live race + weather data
+- GitHub Actions scheduling + auto-commits
+
+---
 
 ## Why this project matters
 
@@ -54,13 +63,22 @@ This project goes beyond simple race tracking. It combines live competition data
 
 It is a compact example of how raw external data can be transformed into structured, domain-aware communication.
 
+---
+
 ## Example visual
 
-Daily 24h covered distance over time, compared to a rolling 5-day average.  
-This makes it easier to distinguish single strong days from broader performance trends during the crossing.
+Daily 24h distance over time with a rolling 5-day average.
+
+The chart highlights momentum rather than single performances, making it easy to see when performance is building. During the race, this created a clear sense of progression that followers could track day by day.
 
 ![Alt text](https://github.com/kazverstraete-a11y/worlds-toughest-row-trackers/blob/main/outputs/d24_trend_2026-01-17.png)
 
+## Note
+
+The race started on 2025-12-14, but this tracker was built after the event had already started.  
+As a result, the historical trend begins from the first stored local snapshot rather than from race day 1.
+
+---
 
 ## Daily update output includes
 
@@ -76,6 +94,8 @@ This makes it easier to distinguish single strong days from broader performance 
 - estimated rowing strokes
 - elapsed time at sea
 - remaining distance to Antigua
+
+---
 
 ## Example output
 ```text
